@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Inventory Management | OMNI AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc3",
+                        "surface-container-high": "#e1e8ff",
+                        "outline-variant": "#c3c6d6",
+                        "on-error-container": "#93000a",
+                        "primary": "#003d9b",
+                        "on-tertiary-fixed-variant": "#005235",
+                        "on-primary-container": "#c4d2ff",
+                        "on-secondary-fixed": "#2f1500",
+                        "on-secondary-container": "#613100",
+                        "surface-variant": "#d8e2ff",
+                        "on-primary-fixed": "#001848",
+                        "inverse-surface": "#1d3054",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "inverse-on-surface": "#edf0ff",
+                        "secondary-fixed-dim": "#ffb77e",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "background": "#faf9ff",
+                        "surface-dim": "#ccdaff",
+                        "secondary-container": "#fe8a00",
+                        "on-tertiary-fixed": "#002113",
+                        "on-tertiary-container": "#72e9af",
+                        "error-container": "#ffdad6",
+                        "secondary": "#914d00",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "tertiary": "#004e32",
+                        "surface-container": "#e9edff",
+                        "surface-container-low": "#f1f3ff",
+                        "primary-fixed": "#dae2ff",
+                        "on-surface": "#051a3e",
+                        "inverse-primary": "#b2c5ff",
+                        "tertiary-container": "#006844",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434654",
+                        "outline": "#737685",
+                        "tertiary-fixed-dim": "#65dca4",
+                        "primary-container": "#0052cc",
+                        "on-background": "#051a3e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#faf9ff",
+                        "surface-container-highest": "#d8e2ff",
+                        "surface": "#faf9ff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0c56d0",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "tertiary-fixed": "#82f9be",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "label-bold": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            background-color: #F4F5F7;
+            color: #051a3e;
+        }
+
+        .data-table-row:hover {
+            background-color: rgba(0, 61, 155, 0.04);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c3c6d6;
+            border-radius: 3px;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            animation: fadeIn 0.15s ease;
+        }
+
+        .modal-card {
+            animation: slideUp 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Row fade */
+        .row-enter {
+            animation: rowFade 0.3s ease;
+        }
+
+        @keyframes rowFade {
+            from {
+                opacity: 0;
+                background: #dae2ff;
+            }
+
+            to {
+                opacity: 1;
+                background: transparent;
+            }
+        }
+
+        /* Toast */
+        #toast {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Form inputs */
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #c3c6d6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Inter, sans-serif;
+            background: #f1f3ff;
+            color: #051a3e;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: #003d9b;
+            box-shadow: 0 0 0 3px rgba(0, 61, 155, 0.12);
+            background: #fff;
+        }
+
+        .input-field.error {
+            border-color: #ba1a1a;
+        }
+
+        label.form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: #434654;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-white">
+    <!-- TopNavBar -->
+    <header
+        class="bg-surface-container-lowest dark:bg-surface-container-low shadow-sm dark:shadow-none border-b border-outline-variant dark:border-outline docked full-width top-0 z-50 sticky">
+        <div class="flex justify-between items-center w-full px-margin-desktop h-16">
+            <div class="flex items-center gap-xl">
+                <span
+                    class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">OMNI
+                    AI&nbsp;</span>
+                <nav class="hidden md:flex items-center gap-lg">
+                    <div class="flex items-center gap-xl h-full">
+
+                        <a class="h-full flex items-center font-body-md text-body-md text-primary dark:text-primary-fixed active-indicator-top font-bold transition-all duration-150 ease-in-out"
+                            href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Dashboard.html">Dashboard</a>
+                        <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                            href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Live.html">Live
+                            Feed</a>
+                        <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                            href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Analytics.html">Analytics</a>
+
+                        <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                            href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Inventory.html">Inventory</a>
+
+                    </div>
+                </nav>
+            </div>
+            <div class="flex items-center gap-md">
+                <div class="relative hidden lg:block">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+                    <input
+                        class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 text-body-md"
+                        placeholder="Global search..." type="text">
+                </div>
+                <button
+                    class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full"
+                    data-icon="notifications">notifications</button>
+                <button
+                    class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full"
+                    data-icon="settings">settings</button>
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+                    <img class="w-full h-full object-cover"
+                        data-alt="A professional headshot of a senior construction operations manager with short grey hair and spectacles, wearing a high-visibility company polo shirt. The lighting is crisp and natural, set against a clean, modern industrial office backdrop with a soft-focus architectural blueprint on the wall. The image exudes authority, precision, and executive competence in an industrial setting."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQqzU35IsJo-UxRtj12gspyibjekHkmED07aFyIC9BOQNpq4IUHbUYni21-3CMu6cxtT9QKgRY9EpXiutDo4F7v2XSC0cp8djHLcNbElqRwtJChUHHWaSPH8gi9Gb9QVfRDLuCge7T8Ur59LN-qFoLpa4LsHcua7D3Q5kM1zDftF3Fo26yrF5-1xcR7N2JHORG7XQmOOG2U7g92c8LJIzabrAB_MkvgKAPEKftnA5KhrTAPnEblJ3LtxNiCc7DiBesPiA0J9GuuZk3">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-[1440px] mx-auto px-margin-desktop py-lg space-y-lg">
+        <!-- Header Section -->
+        <section class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+            <div>
+                <h1 class="font-headline-xl text-headline-xl text-on-surface">Inventory Management</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Real-time tracking of construction
+                    materials and site resources.</p>
+            </div>
+            <div class="flex gap-sm">
+                <button onclick="exportCSV()"
+                    class="flex items-center gap-2 px-md py-2 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container transition-all active:opacity-80 rounded-lg">
+                    <span class="material-symbols-outlined text-[20px]">file_download</span>
+                    <span class="font-label-bold text-label-bold uppercase">Export CSV</span>
+                </button>
+                <button onclick="openAddModal()"
+                    class="flex items-center gap-2 px-md py-2 bg-primary text-white hover:opacity-90 transition-all active:opacity-80 rounded-lg">
+                    <span class="material-symbols-outlined text-[20px]">add</span>
+                    <span class="font-label-bold text-label-bold uppercase">Add New Material</span>
+                </button>
+            </div>
+        </section>
+        <!-- Summary Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+            <!-- Total Items -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">
+                            Total Items</p>
+                        <h2 id="card-total" class="font-headline-lg text-headline-lg mt-2 text-on-surface">—</h2>
+                    </div>
+                    <div class="p-3 bg-surface-container-high rounded-lg">
+                        <span class="material-symbols-outlined text-primary text-[24px]">inventory_2</span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span id="card-total-sub" class="text-on-surface-variant text-[12px]">Across all categories</span>
+                </div>
+            </div>
+            <!-- Low Stock Alerts -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm border-l-4 border-l-secondary-container">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Low
+                            Stock Alerts</p>
+                        <h2 id="card-lowstock" class="font-headline-lg text-headline-lg mt-2 text-on-surface">—</h2>
+                    </div>
+                    <div class="p-3 bg-secondary-fixed rounded-lg">
+                        <span class="material-symbols-outlined text-secondary text-[24px]">warning</span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p id="card-lowstock-sub" class="text-on-surface-variant text-[13px] font-medium italic">—</p>
+                </div>
+            </div>
+            <!-- Out of Stock -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Out
+                            of Stock</p>
+                        <h2 id="card-outofstock" class="font-headline-lg text-headline-lg mt-2 text-on-surface">—</h2>
+                    </div>
+                    <div class="p-3 bg-error-container rounded-lg">
+                        <span class="material-symbols-outlined text-error text-[24px]">remove_shopping_cart</span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-on-surface-variant text-[12px]">Items needing urgent restock</p>
+                </div>
+            </div>
+        </section>
+        <!-- Main Content Area: Data Table Card -->
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+            <!-- Table Controls -->
+            <div
+                class="p-lg border-b border-outline-variant flex flex-col lg:flex-row lg:items-center justify-between gap-md bg-white">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Construction Materials</h3>
+                <div class="flex flex-wrap items-center gap-sm">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <div class="relative w-full sm:w-64">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+                            <input id="tableSearch"
+                                class="w-full pl-9 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded text-body-md focus:border-primary focus:ring-1 focus:ring-primary"
+                                placeholder="Search materials..." type="text" oninput="renderTable()">
+                        </div>
+                        <button onclick="openAddModal()"
+                            class="flex items-center justify-center h-10 px-3 bg-primary text-white rounded hover:opacity-90 transition-all shrink-0 gap-1.5"
+                            title="Add New Material">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            <span
+                                class="font-label-bold text-[12px] uppercase tracking-wide hidden sm:inline">Add</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-body-md font-medium text-on-surface-variant whitespace-nowrap">Filter
+                            by:</span>
+                        <select id="categoryFilter"
+                            class="bg-surface-container-low border border-outline-variant rounded px-3 py-2 text-body-md focus:border-primary focus:ring-0"
+                            onchange="renderTable()">
+                            <option value="">All Categories</option>
+                            <option>Structural</option>
+                            <option>Finishing</option>
+                            <option>Foundational</option>
+                            <option>Electrical</option>
+                            <option>Plumbing</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-body-md font-medium text-on-surface-variant whitespace-nowrap">Status:</span>
+                        <select id="statusFilter"
+                            class="bg-surface-container-low border border-outline-variant rounded px-3 py-2 text-body-md focus:border-primary focus:ring-0"
+                            onchange="renderTable()">
+                            <option value="">All</option>
+                            <option>Optimal</option>
+                            <option>Low Stock</option>
+                            <option>Out of Stock</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Table Container -->
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container text-on-surface-variant border-b border-outline-variant">
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider">Material
+                            </th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider">Category
+                            </th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider cursor-pointer select-none"
+                                onclick="sortBy('stock')">
+                                <div class="flex items-center gap-1">Current Stock <span
+                                        class="material-symbols-outlined text-[16px]" id="sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider">Unit</th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider">Status</th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider">Last
+                                Restocked</th>
+                            <th class="px-lg py-4 font-label-bold text-label-bold uppercase tracking-wider text-right">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody" class="divide-y divide-outline-variant"></tbody>
+                </table>
+            </div>
+            <!-- Empty state -->
+            <div id="empty-state" class="hidden py-16 text-center">
+                <span
+                    class="material-symbols-outlined text-[56px] text-on-surface-variant opacity-30">inventory_2</span>
+                <p class="mt-4 text-on-surface-variant font-body-lg">No items match your search.</p>
+                <button onclick="openAddModal()"
+                    class="mt-4 px-md py-2 bg-primary text-white rounded-lg text-body-md hover:opacity-90 transition-all">Add
+                    New Material</button>
+            </div>
+            <!-- Table Footer -->
+            <div
+                class="px-lg py-4 border-t border-outline-variant flex items-center justify-between bg-surface-container-low/30">
+                <span id="row-count" class="text-body-md text-on-surface-variant">Showing <span
+                        class="font-bold">0</span> items</span>
+                <span class="text-[12px] text-on-surface-variant">Click <span class="font-semibold">Edit</span> to
+                    update stock &middot; <span class="font-semibold text-error">Delete</span> to remove item</span>
+            </div>
+        </section>
+        <!-- Secondary Detail View / Analytics Snippet -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+                <h4 class="font-headline-md text-headline-md text-on-surface mb-4">Stock Availability Projection</h4>
+                <div class="h-64 flex items-end justify-between gap-2 px-md pb-md relative">
+                    <!-- Placeholder for Projection Chart -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+                        <span class="material-symbols-outlined text-[120px]">analytics</span>
+                    </div>
+                    <div
+                        class="flex-1 bg-primary/20 hover:bg-primary/30 transition-colors rounded-t h-[60%] relative group">
+                        <div
+                            class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white px-2 py-1 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
+                            60%</div>
+                    </div>
+                    <div
+                        class="flex-1 bg-primary/40 hover:bg-primary/50 transition-colors rounded-t h-[75%] relative group">
+                    </div>
+                    <div
+                        class="flex-1 bg-primary/60 hover:bg-primary/70 transition-colors rounded-t h-[90%] relative group">
+                    </div>
+                    <div class="flex-1 bg-primary hover:opacity-90 transition-colors rounded-t h-[80%] relative group">
+                    </div>
+                    <div
+                        class="flex-1 bg-primary/40 hover:bg-primary/50 transition-colors rounded-t h-[45%] relative group">
+                    </div>
+                    <div
+                        class="flex-1 bg-secondary-container hover:opacity-90 transition-colors rounded-t h-[20%] relative group">
+                        <div
+                            class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white px-2 py-1 rounded text-[10px] opacity-100 transition-opacity">
+                            CRITICAL</div>
+                    </div>
+                    <div
+                        class="flex-1 bg-primary/30 hover:bg-primary/40 transition-colors rounded-t h-[55%] relative group">
+                    </div>
+                </div>
+                <div class="flex justify-between mt-2 font-label-bold text-label-bold text-on-surface-variant px-md">
+                    <span class="">WK 42</span>
+                    <span class="">WK 43</span>
+                    <span class="">WK 44</span>
+                    <span class="">WK 45</span>
+                    <span class="">WK 46</span>
+                    <span class="">WK 47</span>
+                    <span class="">WK 48</span>
+                </div>
+            </div>
+            <div
+                class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+                <div class="p-lg border-b border-outline-variant bg-white">
+                    <h4 class="font-headline-md text-headline-md text-on-surface">Recent Warehouse Activity</h4>
+                </div>
+                <div id="activity-log" class="flex-1 p-lg space-y-md overflow-y-auto custom-scrollbar max-h-64"></div>
+                <div class="p-md bg-surface-container-low text-center">
+                    <a class="font-label-bold text-label-bold text-primary hover:underline uppercase" href="#">View Full
+                        Audit Log</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer
+        class="bg-surface-container-low border-t border-outline-variant w-full mt-xl py-md px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md">
+        <div class="flex flex-col md:flex-row items-center gap-md">
+            <span class="font-headline-md text-headline-md text-primary font-bold">OMNI AI</span>
+            <span class="text-on-surface-variant font-label-bold text-label-bold">© 2024 OMNI AI. Industrial Precision
+                Guaranteed.</span>
+        </div>
+        <div class="flex gap-lg">
+            <a class="text-on-surface-variant hover:underline font-label-bold text-label-bold" href="#">Support</a>
+            <a class="text-on-surface-variant hover:underline font-label-bold text-label-bold" href="#">Safety
+                Protocols</a>
+            <a class="text-on-surface-variant hover:underline font-label-bold text-label-bold" href="#">Terms of
+                Service</a>
+        </div>
+    </footer>
+
+    <!-- ===== ADD / EDIT MODAL ===== -->
+    <div id="item-modal" class="fixed inset-0 z-[200] hidden">
+        <div class="modal-backdrop absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative flex items-center justify-center min-h-full p-4">
+            <div
+                class="modal-card bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-in fade-in zoom-in duration-200">
+                <button onclick="closeModal()"
+                    class="absolute top-5 right-5 p-1.5 rounded-full hover:bg-surface-container transition-colors">
+                    <span class="material-symbols-outlined text-[20px] text-on-surface-variant">close</span>
+                </button>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2.5 rounded-xl bg-primary/10">
+                        <span id="modal-icon"
+                            class="material-symbols-outlined text-primary text-[24px]">add_circle</span>
+                    </div>
+                    <h2 id="modal-title" class="font-headline-md text-headline-md text-on-surface">Add New Material</h2>
+                </div>
+                <form id="item-form" onsubmit="saveItem(event)" novalidate>
+                    <div class="grid grid-cols-1 gap-5">
+                        <div>
+                            <label class="form-label" for="f-name">Material Name <span
+                                    class="text-error">*</span></label>
+                            <input id="f-name" class="input-field" type="text" placeholder="e.g. Portland Cement"
+                                required>
+                            <p id="f-name-err" class="text-error text-[11px] mt-1 hidden">This field is required.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label" for="f-category">Category <span
+                                        class="text-error">*</span></label>
+                                <select id="f-category" class="input-field" required>
+                                    <option value="">Select...</option>
+                                    <option>Structural</option>
+                                    <option>Finishing</option>
+                                    <option>Foundational</option>
+                                    <option>Electrical</option>
+                                    <option>Plumbing</option>
+                                </select>
+                                <p id="f-category-err" class="text-error text-[11px] mt-1 hidden">Required.</p>
+                            </div>
+                            <div>
+                                <label class="form-label" for="f-unit">Unit <span class="text-error">*</span></label>
+                                <select id="f-unit" class="input-field" required>
+                                    <option value="">Select...</option>
+                                    <option>Units</option>
+                                    <option>Bags</option>
+                                    <option>Boxes</option>
+                                    <option>Tons</option>
+                                    <option>Meters</option>
+                                    <option>Liters</option>
+                                    <option>Rolls</option>
+                                    <option>Sheets</option>
+                                    <option>Pieces</option>
+                                </select>
+                                <p id="f-unit-err" class="text-error text-[11px] mt-1 hidden">Required.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label" for="f-stock">Current Stock <span
+                                        class="text-error">*</span></label>
+                                <input id="f-stock" class="input-field" type="number" min="0" placeholder="0" required>
+                                <p id="f-stock-err" class="text-error text-[11px] mt-1 hidden">Must be &ge; 0.</p>
+                            </div>
+                            <div>
+                                <label class="form-label" for="f-threshold">Low-Stock Threshold <span
+                                        class="text-error">*</span></label>
+                                <input id="f-threshold" class="input-field" type="number" min="1" placeholder="100"
+                                    required>
+                                <p id="f-threshold-err" class="text-error text-[11px] mt-1 hidden">Must be &ge; 1.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="f-supplier">Supplier (optional)</label>
+                            <input id="f-supplier" class="input-field" type="text" placeholder="e.g. BuildMart Co.">
+                        </div>
+                    </div>
+                    <div class="mt-7 flex gap-3 justify-end">
+                        <button type="button" onclick="closeModal()"
+                            class="px-5 py-2.5 border border-outline-variant rounded-lg text-body-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+                        <button type="submit" id="modal-submit-btn"
+                            class="px-5 py-2.5 bg-primary text-white rounded-lg text-body-md font-semibold hover:opacity-90 transition-all flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">save</span> Save Material
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DELETE CONFIRM MODAL ===== -->
+    <div id="delete-modal" class="fixed inset-0 z-[200] hidden">
+        <div class="modal-backdrop absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+        <div class="relative flex items-center justify-center min-h-full p-4">
+            <div
+                class="modal-card bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center animate-in fade-in zoom-in duration-200">
+                <div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-error text-[32px]">delete_forever</span>
+                </div>
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Remove Item?</h2>
+                <p class="text-body-md text-on-surface-variant mb-1">You are about to permanently remove:</p>
+                <p id="delete-item-name" class="font-semibold text-on-surface text-[16px] mb-6">—</p>
+                <div class="flex gap-3 justify-center">
+                    <button onclick="closeDeleteModal()"
+                        class="px-5 py-2.5 border border-outline-variant rounded-lg text-body-md text-on-surface-variant hover:bg-surface-container transition-colors">Cancel</button>
+                    <button onclick="confirmDelete()"
+                        class="px-5 py-2.5 bg-error text-white rounded-lg text-body-md font-semibold hover:opacity-90 transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">delete</span> Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 z-[300] flex items-center gap-3 bg-on-surface text-white px-5 py-3 rounded-xl shadow-xl translate-y-20 opacity-0 transition-all duration-300">
+        <span id="toast-icon" class="material-symbols-outlined text-[20px]">check_circle</span>
+        <span id="toast-msg" class="text-[14px] font-medium">Done!</span>
+    </div>
+
+    <style>
+        .input-field {
+            @apply w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all;
+        }
+
+        .input-field.error {
+            @apply border-error focus:border-error focus:ring-error;
+        }
+
+        .form-label {
+            @apply block text-label-bold text-[13px] text-on-surface-variant mb-1.5;
+        }
+
+        #toast.show {
+            @apply translate-y-0 opacity-100;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoom-in {
+            from {
+                transform: scale(0.95);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .animate-in {
+            animation: fade-in 0.2s ease-out, zoom-in 0.2s ease-out;
+        }
+    </style>
+
+    <!-- Noise overlay -->
+    <div
+        style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0.015;z-index:9999;background-image:url('https://www.transparenttextures.com/patterns/p6.png');">
+    </div>
+
+    <script>
+        // ── Data Store ──────────────────────────────────────────────────────────
+        let inventory = [
+            { id: 1, name: 'Bricks', category: 'Structural', stock: 45000, threshold: 5000, unit: 'Units', supplier: 'MasonPlus', lastRestocked: '2 days ago' },
+            { id: 2, name: 'Tiles (Ceramic)', category: 'Finishing', stock: 1200, threshold: 200, unit: 'Boxes', supplier: 'TileWorld', lastRestocked: '3 days ago' },
+            { id: 3, name: 'Steel Rods', category: 'Structural', stock: 12.5, threshold: 50, unit: 'Tons', supplier: 'MetalHub', lastRestocked: '1 week ago' },
+            { id: 4, name: 'Concrete Mix (High Grade)', category: 'Foundational', stock: 850, threshold: 100, unit: 'Bags', supplier: 'ConcreteCo', lastRestocked: '5 days ago' },
+            { id: 5, name: 'PVC Conduit (25mm)', category: 'Electrical', stock: 2400, threshold: 300, unit: 'Meters', supplier: 'ElectroPro', lastRestocked: 'Yesterday' },
+        ];
+        let nextId = 6;
+        let editingId = null;
+        let deletingId = null;
+        let sortAsc = true;
+        let sortActive = false;
+
+        const activityLog = [
+            { icon: 'check_circle', iconBg: 'bg-tertiary-fixed', iconColor: 'text-tertiary', title: 'Delivery Received: Ceramic Tiles', sub: 'Gate 4 - Verified by Sarah J. &bull; 2 hours ago' },
+            { icon: 'outbox', iconBg: 'bg-surface-container-high', iconColor: 'text-primary', title: 'Material Requisition: Concrete Bags (50)', sub: 'Zone B Construction - Foreman Dave &bull; 5 hours ago' },
+            { icon: 'report', iconBg: 'bg-error-container', iconColor: 'text-error', title: 'Shortage Alert: 16mm Steel Rods', sub: 'System Alert - Projected exhaustion in 48h &bull; 8 hours ago' },
+        ];
+
+        // ── Status helpers ──────────────────────────────────────────────────────
+        function getStatus(item) {
+            if (item.stock <= 0) return 'Out of Stock';
+            if (item.stock < item.threshold) return 'Low Stock';
+            return 'Optimal';
+        }
+        function statusBadge(status) {
+            if (status === 'Optimal') return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[12px] font-bold"><span class="w-2 h-2 rounded-full bg-tertiary"></span> Optimal</span>`;
+            if (status === 'Low Stock') return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">warning</span> Low Stock</span>`;
+            return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-[12px] font-bold"><span class="material-symbols-outlined text-[14px]">block</span> Out of Stock</span>`;
+        }
+        function rowHighlight(status) {
+            if (status === 'Low Stock') return 'bg-yellow-50';
+            if (status === 'Out of Stock') return 'bg-red-50';
+            return '';
+        }
+
+        // ── Render Table ────────────────────────────────────────────────────────
+        function renderTable() {
+            const search = document.getElementById('tableSearch').value.toLowerCase();
+            const catFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            let filtered = inventory.filter(item => {
+                const matchSearch = item.name.toLowerCase().includes(search) || item.category.toLowerCase().includes(search);
+                const matchCat = !catFilter || item.category === catFilter;
+                const matchStatus = !statusFilter || getStatus(item) === statusFilter;
+                return matchSearch && matchCat && matchStatus;
+            });
+            if (sortActive) filtered.sort((a, b) => sortAsc ? a.stock - b.stock : b.stock - a.stock);
+
+            const tbody = document.getElementById('inventory-tbody');
+            const empty = document.getElementById('empty-state');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                tbody.innerHTML = filtered.map(item => {
+                    const status = getStatus(item);
+                    return `<tr class="data-table-row transition-colors ${rowHighlight(status)}" data-id="${item.id}">
+                    <td class="px-lg py-4 font-body-md text-body-md text-on-surface font-semibold">
+                        <div>${item.name}</div>
+                        ${item.supplier ? `<div class="text-[11px] text-on-surface-variant font-normal mt-0.5">${item.supplier}</div>` : ''}
+                    </td>
+                    <td class="px-lg py-4 text-on-surface-variant">
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-surface-container text-on-surface-variant">${item.category}</span>
+                    </td>
+                    <td class="px-lg py-4 font-mono-data text-mono-data text-on-surface">
+                        <div class="flex items-center gap-2">
+                            <span>${Number(item.stock).toLocaleString()}</span>
+                            <button onclick="quickAdjust(${item.id},-1)" class="p-0.5 rounded hover:bg-surface-container-high transition-colors" title="Decrease">
+                                <span class="material-symbols-outlined text-[14px] text-on-surface-variant">remove</span>
+                            </button>
+                            <button onclick="quickAdjust(${item.id},1)" class="p-0.5 rounded hover:bg-surface-container-high transition-colors" title="Increase">
+                                <span class="material-symbols-outlined text-[14px] text-on-surface-variant">add</span>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="px-lg py-4 text-on-surface-variant">${item.unit}</td>
+                    <td class="px-lg py-4">${statusBadge(status)}</td>
+                    <td class="px-lg py-4 text-on-surface-variant">${item.lastRestocked}</td>
+                    <td class="px-lg py-4 text-right">
+                        <div class="flex justify-end gap-1">
+                            <button onclick="openEditModal(${item.id})" class="p-1.5 hover:bg-surface-container-high rounded transition-colors" title="Edit">
+                                <span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+                            </button>
+                            <button onclick="openDeleteModal(${item.id})" class="p-1.5 hover:bg-error-container rounded transition-colors" title="Delete">
+                                <span class="material-symbols-outlined text-[18px] text-error">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+                }).join('');
+            }
+            document.getElementById('row-count').innerHTML =
+                `Showing <span class="font-bold">${filtered.length}</span> of <span class="font-bold">${inventory.length}</span> item${inventory.length !== 1 ? 's' : ''}`;
+            updateCards();
+        }
+
+        // ── Summary Cards ───────────────────────────────────────────────────────
+        function updateCards() {
+            const low = inventory.filter(i => getStatus(i) === 'Low Stock');
+            const out = inventory.filter(i => getStatus(i) === 'Out of Stock');
+            const cats = [...new Set(inventory.map(i => i.category))].length;
+            document.getElementById('card-total').textContent = inventory.length;
+            document.getElementById('card-total-sub').textContent = `Across ${cats} categor${cats !== 1 ? 'ies' : 'y'}`;
+            document.getElementById('card-lowstock').textContent = low.length;
+            document.getElementById('card-lowstock-sub').textContent = low.length
+                ? low.map(i => i.name).join(', ') + ' below safety threshold.'
+                : 'All items within safe limits.';
+            document.getElementById('card-outofstock').textContent = out.length;
+        }
+
+        // ── Sort ────────────────────────────────────────────────────────────────
+        function sortBy() {
+            sortActive = true;
+            sortAsc = !sortAsc;
+            document.getElementById('sort-icon').textContent = sortAsc ? 'arrow_upward' : 'arrow_downward';
+            renderTable();
+        }
+
+        // ── Quick ±1 ────────────────────────────────────────────────────────────
+        function quickAdjust(id, delta) {
+            const item = inventory.find(i => i.id === id); if (!item) return;
+            item.stock = Math.max(0, parseFloat(item.stock) + delta);
+            item.lastRestocked = 'Just now';
+            pushActivity(delta > 0 ? 'add_circle' : 'remove_circle',
+                delta > 0 ? 'bg-tertiary-fixed' : 'bg-error-container',
+                delta > 0 ? 'text-tertiary' : 'text-error',
+                `Stock ${delta > 0 ? 'increased' : 'decreased'}: ${item.name} \u2192 ${Number(item.stock).toLocaleString()} ${item.unit}`,
+                'Manual adjustment &bull; Just now');
+            renderTable();
+            showToast(delta > 0 ? 'add_circle' : 'remove_circle', `${item.name}: ${Number(item.stock).toLocaleString()} ${item.unit}`);
+        }
+
+        // ── Modals ──────────────────────────────────────────────────────────────
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modal-title').textContent = 'Add New Material';
+            document.getElementById('modal-icon').textContent = 'add_circle';
+            document.getElementById('modal-submit-btn').innerHTML = '<span class="material-symbols-outlined text-[18px]">save</span> Save Material';
+            clearForm(); showModal('item-modal');
+        }
+        function openEditModal(id) {
+            const item = inventory.find(i => i.id === id); if (!item) return;
+            editingId = id;
+            document.getElementById('modal-title').textContent = 'Edit Material';
+            document.getElementById('modal-icon').textContent = 'edit';
+            document.getElementById('modal-submit-btn').innerHTML = '<span class="material-symbols-outlined text-[18px]">save</span> Update Material';
+            document.getElementById('f-name').value = item.name;
+            document.getElementById('f-category').value = item.category;
+            document.getElementById('f-unit').value = item.unit;
+            document.getElementById('f-stock').value = item.stock;
+            document.getElementById('f-threshold').value = item.threshold;
+            document.getElementById('f-supplier').value = item.supplier || '';
+            clearErrors(); showModal('item-modal');
+        }
+        function saveItem(e) {
+            e.preventDefault(); if (!validateForm()) return;
+            const name = document.getElementById('f-name').value.trim();
+            const category = document.getElementById('f-category').value;
+            const unit = document.getElementById('f-unit').value;
+            const stock = parseFloat(document.getElementById('f-stock').value);
+            const threshold = parseFloat(document.getElementById('f-threshold').value);
+            const supplier = document.getElementById('f-supplier').value.trim();
+            if (editingId !== null) {
+                const item = inventory.find(i => i.id === editingId);
+                const old = item.stock;
+                Object.assign(item, { name, category, unit, stock, threshold, supplier, lastRestocked: 'Just now' });
+                pushActivity('edit', 'bg-surface-container-high', 'text-primary', `Updated: ${name} (${old} \u2192 ${stock} ${unit})`, 'Manual edit &bull; Just now');
+                showToast('edit', `${name} updated successfully`);
+            } else {
+                inventory.unshift({ id: nextId++, name, category, unit, stock, threshold, supplier, lastRestocked: 'Just now' });
+                pushActivity('add_circle', 'bg-tertiary-fixed', 'text-tertiary', `New item added: ${name} (${stock} ${unit})`, 'Manual entry &bull; Just now');
+                showToast('add_circle', `${name} added to inventory`);
+            }
+            closeModal(); renderTable();
+        }
+        function openDeleteModal(id) {
+            deletingId = id;
+            const item = inventory.find(i => i.id === id);
+            document.getElementById('delete-item-name').textContent = item ? item.name : '—';
+            showModal('delete-modal');
+        }
+        function confirmDelete() {
+            const item = inventory.find(i => i.id === deletingId);
+            if (item) {
+                inventory = inventory.filter(i => i.id !== deletingId);
+                pushActivity('delete', 'bg-error-container', 'text-error', `Item removed: ${item.name}`, 'Manual deletion &bull; Just now');
+                showToast('delete', `${item.name} removed`);
+            }
+            closeDeleteModal(); renderTable();
+        }
+        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); deletingId = null; }
+        function showModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { document.getElementById('item-modal').classList.add('hidden'); document.body.style.overflow = ''; editingId = null; }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeDeleteModal(); } });
+
+        // ── Validation ──────────────────────────────────────────────────────────
+        function validateForm() {
+            let ok = true; clearErrors();
+            if (!document.getElementById('f-name').value.trim()) { showErr('f-name', 'f-name-err'); ok = false; }
+            if (!document.getElementById('f-category').value) { showErr('f-category', 'f-category-err'); ok = false; }
+            if (!document.getElementById('f-unit').value) { showErr('f-unit', 'f-unit-err'); ok = false; }
+            const s = document.getElementById('f-stock').value;
+            if (s === '' || parseFloat(s) < 0) { showErr('f-stock', 'f-stock-err'); ok = false; }
+            const t = document.getElementById('f-threshold').value;
+            if (!t || parseFloat(t) < 1) { showErr('f-threshold', 'f-threshold-err'); ok = false; }
+            return ok;
+        }
+        function showErr(fid, eid) { document.getElementById(fid).classList.add('error'); document.getElementById(eid).classList.remove('hidden'); }
+        function clearErrors() { ['f-name', 'f-category', 'f-unit', 'f-stock', 'f-threshold'].forEach(id => document.getElementById(id).classList.remove('error'));['f-name-err', 'f-category-err', 'f-unit-err', 'f-stock-err', 'f-threshold-err'].forEach(id => document.getElementById(id).classList.add('hidden')); }
+        function clearForm() { ['f-name', 'f-stock', 'f-threshold', 'f-supplier'].forEach(id => document.getElementById(id).value = ''); document.getElementById('f-category').value = ''; document.getElementById('f-unit').value = ''; clearErrors(); }
+
+        // ── Toast ───────────────────────────────────────────────────────────────
+        let _tt;
+        function showToast(icon, msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-icon').textContent = icon;
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.add('show'); clearTimeout(_tt);
+            _tt = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ── Activity Log ────────────────────────────────────────────────────────
+        function pushActivity(icon, iconBg, iconColor, title, sub) {
+            activityLog.unshift({ icon, iconBg, iconColor, title, sub });
+            if (activityLog.length > 10) activityLog.pop();
+            renderActivity();
+        }
+        function renderActivity() {
+            document.getElementById('activity-log').innerHTML = activityLog.map(a => `
+            <div class="flex gap-md">
+                <div class="w-10 h-10 rounded-lg ${a.iconBg} flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined ${a.iconColor}">${a.icon}</span>
+                </div>
+                <div>
+                    <p class="font-body-md text-body-md text-on-surface font-semibold">${a.title}</p>
+                    <p class="text-[12px] text-on-surface-variant">${a.sub}</p>
+                </div>
+            </div>`).join('');
+        }
+
+        // ── Export CSV ──────────────────────────────────────────────────────────
+        function exportCSV() {
+            const h = ['ID', 'Name', 'Category', 'Stock', 'Unit', 'Threshold', 'Status', 'Supplier', 'Last Restocked'];
+            const rows = inventory.map(i => [i.id, `"${i.name}"`, i.category, i.stock, i.unit, i.threshold, getStatus(i), `"${i.supplier || ''}"`, `"${i.lastRestocked}"`]);
+            const csv = [h, ...rows].map(r => r.join(',')).join('\n');
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'inventory.csv'; a.click();
+            showToast('file_download', 'CSV exported successfully');
+        }
+
+        // ── Init ────────────────────────────────────────────────────────────────
+        renderActivity();
+        renderTable();
+    </script>
+</body>
+
+</html>

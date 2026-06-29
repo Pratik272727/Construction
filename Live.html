@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SafeGuard AI - PPE Monitoring</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fe8a00",
+                        "surface-container-high": "#e1e8ff",
+                        "surface-container-highest": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#005235",
+                        "primary": "#003d9b",
+                        "on-tertiary-container": "#72e9af",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#edf0ff",
+                        "background": "#faf9ff",
+                        "inverse-primary": "#b2c5ff",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c3c6d6",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "outline": "#737685",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "tertiary": "#004e32",
+                        "on-secondary-fixed": "#2f1500",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#ffdcc3",
+                        "surface-tint": "#0c56d0",
+                        "on-tertiary-fixed": "#002113",
+                        "on-surface": "#051a3e",
+                        "surface-container-low": "#f1f3ff",
+                        "secondary-fixed-dim": "#ffb77e",
+                        "error": "#ba1a1a",
+                        "surface": "#faf9ff",
+                        "on-background": "#051a3e",
+                        "surface-container": "#e9edff",
+                        "on-surface-variant": "#434654",
+                        "tertiary-fixed": "#82f9be",
+                        "surface-variant": "#d8e2ff",
+                        "primary-container": "#0052cc",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-container": "#613100",
+                        "tertiary-container": "#006844",
+                        "inverse-surface": "#1d3054",
+                        "on-primary-container": "#c4d2ff",
+                        "secondary": "#914d00",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#65dca4",
+                        "surface-dim": "#ccdaff",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#faf9ff",
+                        "primary-fixed": "#dae2ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "xl": "40px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .feed-overlay {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+        }
+
+        .ai-box-warning {
+            border: 2px solid #ba1a1a;
+            box-shadow: 0 0 0 1px rgba(186, 26, 26, 0.4);
+        }
+
+        .ai-box-success {
+            border: 2px solid #006844;
+            box-shadow: 0 0 0 1px rgba(0, 104, 68, 0.4);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+    <!-- Top Navigation Bar (Consolidated) -->
+    <header
+        class="bg-surface-container-lowest border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-margin-desktop h-16 fixed top-0 z-50">
+        <div class="flex items-center gap-xl h-full">
+            <span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">OMNI
+                AI&nbsp;</span>
+            <div class="hidden md:flex items-center gap-lg h-full pt-1">
+                <a class="h-full flex items-center font-body-md text-body-md text-primary dark:text-primary-fixed active-indicator-top font-bold transition-all duration-150 ease-in-out"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Dashboard.html">Dashboard</a>
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Live.html">Live
+                    Feed</a>
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Analytics.html">Analytics</a>
+
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Inventory.html">Inventory</a>
+            </div>
+        </div>
+        <div class="flex items-center gap-lg">
+            <div
+                class="flex items-center bg-surface-container-low px-md py-xs rounded-lg border border-outline-variant">
+                <span class="material-symbols-outlined text-on-surface-variant mr-sm text-[20px]">search</span>
+                <input class="bg-transparent border-none focus:ring-0 text-body-md w-48" placeholder="Search zone..."
+                    type="text">
+            </div>
+            <div class="flex items-center gap-md">
+                <button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
+                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+                </button>
+                <button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+                    <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+                </button>
+                <div
+                    class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-label-bold">
+                    JD
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Area (Expanded) -->
+    <main class="pt-16 h-screen flex w-full">
+        <!-- Center Section: Feeds and Logs -->
+        <div class="flex-1 flex flex-col h-full overflow-hidden p-lg bg-background">
+            <div class="flex flex-col flex-1 min-h-0">
+                <!-- Video with Live Clock Overlay -->
+                <div class="relative rounded-xl overflow-hidden bg-black shadow-xl" style="flex:1; min-height:0;">
+
+                    <!-- Live clock badge overlay -->
+                    <div
+                        class="absolute top-3 right-4 z-20 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse inline-block"></span>
+                        <span class="text-white text-[11px] font-semibold tracking-widest uppercase">LIVE</span>
+                        <span id="live-clock" class="text-white/80 text-[11px] font-mono ml-1"></span>
+                    </div>
+
+                    <!-- Video -->
+                    <video id="main-feed-video" controls autoplay muted loop
+                        style="width:100%; height:100%; display:block; object-fit:contain; background:#000;">
+                        <source src="Chalo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                </div>
+            </div>
+        </div>
+        <!-- Right Section: Live Violations -->
+        <div class="w-80 bg-surface-container-low border-l border-outline-variant flex flex-col h-full shadow-lg">
+            <div class="p-lg border-b border-outline-variant bg-surface-container-high">
+                <h2 class="font-headline-md text-primary flex items-center justify-between">
+                    Live Violations
+                    <span class="bg-error text-white text-[12px] px-sm py-[2px] rounded-full">3 New</span>
+                </h2>
+                <p class="text-[12px] text-on-surface-variant mt-xs">Real-time safety alerts</p>
+            </div>
+            <div class="flex-1 overflow-auto p-md space-y-md">
+                <!-- Alert 1 -->
+                <div
+                    class="bg-surface-container-lowest border border-error/30 rounded-lg p-md shadow-sm border-l-4 border-l-error">
+                    <div class="flex justify-between items-start mb-sm">
+                        <span class="text-error font-label-bold text-[11px] uppercase tracking-wider">Critical
+                            Alert</span>
+                        <span class="text-on-surface-variant font-mono-data text-[10px]">14:18:42</span>
+                    </div>
+                    <h3 class="font-label-bold text-on-surface mb-xs">Missing Hard Hat</h3>
+                    <p class="text-body-md text-on-surface-variant mb-md">Elena Rodriguez detected in Zone B without
+                        head protection.</p>
+                    <div class="flex gap-sm">
+                        <button
+                            class="flex-1 py-xs bg-error text-white rounded text-[11px] font-label-bold hover:brightness-110">Nudge
+                            Worker</button>
+                        <button class="p-xs border border-outline-variant rounded hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-[16px]">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Alert 2 -->
+                <div
+                    class="bg-surface-container-lowest border border-secondary/30 rounded-lg p-md shadow-sm border-l-4 border-l-secondary">
+                    <div class="flex justify-between items-start mb-sm">
+                        <span class="text-secondary font-label-bold text-[11px] uppercase tracking-wider">Warning</span>
+                        <span class="text-on-surface-variant font-mono-data text-[10px]">13:55:10</span>
+                    </div>
+                    <h3 class="font-label-bold text-on-surface mb-xs">No Safety Vest</h3>
+                    <p class="text-body-md text-on-surface-variant mb-md">Contractor #402 detected with
+                        unfastened/missing high-vis vest.</p>
+                    <div class="flex gap-sm">
+                        <button
+                            class="flex-1 py-xs bg-secondary text-white rounded text-[11px] font-label-bold hover:brightness-110">Log
+                            Violation</button>
+                        <button class="p-xs border border-outline-variant rounded hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-[16px]">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Alert 3 -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md shadow-sm opacity-60">
+                    <div class="flex justify-between items-start mb-sm">
+                        <span
+                            class="text-on-surface-variant font-label-bold text-[11px] uppercase tracking-wider">Resolved</span>
+                        <span class="text-on-surface-variant font-mono-data text-[10px]">13:12:04</span>
+                    </div>
+                    <h3 class="font-label-bold text-on-surface mb-xs">Zone Intrusion</h3>
+                    <p class="text-body-md text-on-surface-variant mb-md">Unauthorized entry in Restricted Zone D
+                        (Excavation).</p>
+                    <div
+                        class="py-xs bg-surface-container-high text-center rounded text-[11px] font-label-bold text-on-surface-variant">
+                        Cleared by Supervisor</div>
+                </div>
+            </div>
+            <div class="p-md bg-surface-container-high">
+                <div class="bg-primary/5 rounded-lg p-sm flex items-center gap-md">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined">analytics</span>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-on-surface-variant font-label-bold uppercase">Daily Safety Score
+                        </div>
+                        <div class="text-headline-md font-bold text-primary">94.2%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Floating Interaction Feedback Script -->
+    <script>
+        // Simple interactivity for demonstration
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const originalContent = this.innerHTML;
+                if (this.innerText.includes('Nudge') || this.innerText.includes('Log')) {
+                    this.innerHTML = '<span class="material-symbols-outlined animate-spin text-[16px]">sync</span>';
+                    setTimeout(() => {
+                        this.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span> Sent';
+                        this.classList.replace('bg-error', 'bg-tertiary');
+                        this.classList.replace('bg-secondary', 'bg-tertiary');
+                        setTimeout(() => {
+                            this.closest('.border-l-4').style.opacity = '0.5';
+                            this.closest('.border-l-4').style.transform = 'translateX(10px)';
+                            this.closest('.border-l-4').style.transition = 'all 0.5s ease';
+                        }, 1000);
+                    }, 800);
+                }
+            });
+        });
+
+
+        // Live clock: update every second
+        setInterval(() => {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) clockEl.textContent = timeStr;
+        }, 1000);
+        // Set clock immediately on load
+        (() => {
+            const now = new Date();
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) clockEl.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+        })();
+    </script>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
