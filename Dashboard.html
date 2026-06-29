@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SAFEGUARD AI - Safety Overview Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001848",
+                        "surface-dim": "#ccdaff",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e1e8ff",
+                        "inverse-surface": "#1d3054",
+                        "primary-container": "#0052cc",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#e9edff",
+                        "on-surface": "#051a3e",
+                        "outline-variant": "#c3c6d6",
+                        "primary-fixed": "#dae2ff",
+                        "tertiary-container": "#006844",
+                        "surface-container-low": "#f1f3ff",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#0c56d0",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "secondary-container": "#fe8a00",
+                        "on-background": "#051a3e",
+                        "surface": "#faf9ff",
+                        "on-primary-container": "#c4d2ff",
+                        "tertiary": "#004e32",
+                        "on-secondary-container": "#613100",
+                        "on-primary": "#ffffff",
+                        "primary": "#003d9b",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005235",
+                        "on-tertiary-container": "#72e9af",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#434654",
+                        "outline": "#737685",
+                        "tertiary-fixed-dim": "#65dca4",
+                        "inverse-on-surface": "#edf0ff",
+                        "secondary-fixed": "#ffdcc3",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-bright": "#faf9ff",
+                        "background": "#faf9ff",
+                        "surface-variant": "#d8e2ff",
+                        "secondary": "#914d00",
+                        "surface-container-highest": "#d8e2ff",
+                        "on-secondary-fixed": "#2f1500",
+                        "inverse-primary": "#b2c5ff",
+                        "tertiary-fixed": "#82f9be",
+                        "secondary-fixed-dim": "#ffb77e",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "40px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "label-bold": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "label-bold": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        body {
+            background-color: #faf9ff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .card-shadow {
+            box-shadow: 0px 4px 8px rgba(9, 30, 66, 0.08);
+        }
+
+        .active-indicator-top {
+            border-bottom: 2px solid #003d9b;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen">
+    <!-- TopNavBar (Updated with all navigation links) -->
+    <nav
+        class="bg-surface-container-lowest dark:bg-surface-dim w-full h-16 border-b border-outline-variant dark:border-outline flex justify-between items-center px-margin-desktop sticky top-0 z-50 transition-all duration-150 ease-in-out">
+        <div class="flex items-center gap-xl h-full">
+            <span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">OMNI
+                AI&nbsp;</span>
+            <div class="hidden md:flex items-center gap-lg h-full pt-1">
+                <a class="h-full flex items-center font-body-md text-body-md text-primary dark:text-primary-fixed active-indicator-top font-bold transition-all duration-150 ease-in-out"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Dashboard.html">Dashboard</a>
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Live.html">Live
+                    Feed</a>
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Analytics.html">Analytics</a>
+
+                <a class="h-full flex items-center font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent"
+                    href="file:///C:/Users/pratik.parmar/OneDrive%20-%20Vinsys%20IT%20Services%20India%20Limited/Desktop/Computer%20vision/Inventory.html">Inventory</a>
+            </div>
+        </div>
+        <div class="flex items-center gap-md">
+            <div class="relative hidden lg:block">
+                <input
+                    class="bg-surface-container-low border border-outline-variant rounded-lg px-md py-xs text-body-md focus:ring-2 focus:ring-primary focus:border-primary w-64 transition-all"
+                    placeholder="Search systems..." type="text">
+                <span
+                    class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+            </div>
+            <button class="p-xs rounded-full hover:bg-surface-container-low transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+            </button>
+            <button class="p-xs rounded-full hover:bg-surface-container-low transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+            </button>
+            <img class="w-8 h-8 rounded-full border border-outline-variant object-cover"
+                data-alt="A professional headshot of a female safety director in a corporate technical environment. She is wearing a dark navy blazer over a clean white shirt, exuding authority and precision. The lighting is crisp and modern, reflecting an industrial-grade office setting with high-utility minimalism and high-key brightness."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGpkVRxQOA2-5b5xJPNBrW1tMho2fRnkLHlAHUAhw12zz5sGyzJUqfks-a-xucaeaHlBJRLiMSSJxYoVcsvJ_q8odSdL8s7zohSBfb-iBCAYn7_dd7TJdXTdz6Henr-S7ezCcF6WogQIjF4a2X4qOwpYUchiCi239Yj6edPSyNkr5GY3QnzP7H-pu54ADqAKvqcVd7wty1Qib7lPP48GaYHK5303JFJbFzYCWS6tAuLkd067Svew4CXJw9bY_2WMP0TYzJ1onDNEK7">
+        </div>
+    </nav>
+    <div class="flex">
+        <!-- SideNavBar Removed as requested -->
+        <!-- Main Content (Expanded to full width) -->
+        <main class="flex-1 p-margin-desktop space-y-gutter">
+            <!-- Header Section -->
+            <header class="flex justify-between items-end mb-lg">
+                <div>
+                    <h1 class="font-headline-xl text-headline-xl text-on-background">Safety Overview</h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">Real-time site compliance and hazard
+                        monitoring.</p>
+                </div>
+                <div class="flex gap-md">
+                    <button
+                        class="flex items-center gap-sm px-lg py-sm bg-surface-container-lowest border border-outline text-primary font-label-bold text-label-bold rounded-lg hover:bg-surface-container transition-all">
+                        <span class="material-symbols-outlined">description</span>
+                        Generate Report
+                    </button>
+                    <button
+                        class="flex items-center gap-sm px-lg py-sm bg-error text-on-error font-label-bold text-label-bold rounded-lg hover:bg-on-error-container transition-all shadow-md">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: &quot;FILL&quot; 1;">emergency_share</span>
+                        Emergency Broadcast
+                    </button>
+                </div>
+            </header>
+            <!-- Top Grid: Health Score & KPIs -->
+            <div class="grid grid-cols-12 gap-gutter">
+                <!-- Site Health Score -->
+                <div
+                    class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <span
+                            class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-wider">Site
+                            Health Score</span>
+                        <span class="material-symbols-outlined text-tertiary">verified_user</span>
+                    </div>
+                    <div class="py-md">
+                        <div class="flex items-baseline gap-xs">
+                            <span
+                                class="font-headline-xl text-[64px] leading-tight font-extrabold text-on-surface">94</span>
+                            <span class="font-headline-md text-on-surface-variant">/100</span>
+                        </div>
+                        <div class="w-full bg-surface-container h-2 rounded-full mt-sm overflow-hidden">
+                            <div class="bg-tertiary h-full w-[94%]"></div>
+                        </div>
+                    </div>
+                    <p class="font-body-md text-body-md text-tertiary flex items-center gap-xs">
+                        <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                        2% increase from last shift
+                    </p>
+                </div>
+                <!-- KPI: Active Cameras -->
+                <div
+                    class="col-span-12 md:col-span-4 lg:col-span-2 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow">
+                    <span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Active
+                        Cameras</span>
+                    <div class="mt-md">
+                        <div class="font-headline-lg text-headline-lg text-on-surface">142<span
+                                class="text-body-md font-normal text-on-surface-variant ml-1">/144</span></div>
+                        <div class="flex items-center gap-xs mt-xs text-error font-body-md">
+                            <span class="material-symbols-outlined text-[14px]">warning</span>
+                            2 Offline
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI: AI Confidence -->
+                <div
+                    class="col-span-12 md:col-span-4 lg:col-span-3 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow">
+                    <span class="font-label-bold text-label-bold text-on-surface-variant uppercase">AI Confidence
+                        (Avg)</span>
+                    <div class="mt-md">
+                        <div class="font-headline-lg text-headline-lg text-on-surface">98.2%</div>
+                    </div>
+                </div>
+                <!-- KPI: PPE Compliance -->
+                <div
+                    class="col-span-12 md:col-span-4 lg:col-span-3 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl card-shadow">
+                    <span class="font-label-bold text-label-bold text-on-surface-variant uppercase">PPE Compliance
+                        Rate</span>
+                    <div class="mt-md">
+                        <div class="font-headline-lg text-headline-lg text-on-surface">89.5%</div>
+                        <div class="flex items-center gap-xs mt-xs text-secondary font-body-md">
+                            <span class="material-symbols-outlined text-[14px]">priority_high</span>
+                            Glove usage low in Zone C
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Data Table: Equipment Monitoring -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-shadow">
+                <div class="p-lg border-b border-outline-variant flex justify-between items-center">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Construction Materials Inventory</h3>
+                    <div class="flex items-center gap-md">
+                        <div class="flex items-center gap-xs">
+                            <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                            <span class="text-label-bold font-label-bold text-on-surface-variant">Optimal</span>
+                        </div>
+                        <span class="text-outline-variant">|</span>
+                        <div class="flex items-center gap-xs">
+                            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                            <span class="text-label-bold font-label-bold text-on-surface-variant">Low Stock</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-container-low">
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant">
+                                    Material</th>
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant">
+                                    Current Stock</th>
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant">
+                                    Unit</th>
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant">
+                                    Status</th>
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant">
+                                    Last Restocked</th>
+                                <th
+                                    class="px-lg py-sm font-label-bold text-label-bold text-on-surface-variant uppercase border-b border-outline-variant text-right">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant">
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="px-lg py-md font-body-md text-body-md font-bold">Bricks</td>
+                                <td class="px-lg py-md font-mono-data text-mono-data">45,000</td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">Units</td>
+                                <td class="px-lg py-md">
+                                    <div class="flex items-center gap-sm">
+                                        <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                                        <span class="font-body-md text-body-md">Optimal</span>
+                                    </div>
+                                </td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">2 days ago
+                                </td>
+                                <td class="px-lg py-md text-right">
+                                    <button
+                                        class="p-xs rounded hover:bg-surface-container-high transition-colors text-on-surface-variant group-hover:text-primary">
+                                        <span class="material-symbols-outlined">more_vert</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="px-lg py-md font-body-md text-body-md font-bold">Tiles (Ceramic)</td>
+                                <td class="px-lg py-md font-mono-data text-mono-data">1,200</td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">Boxes</td>
+                                <td class="px-lg py-md">
+                                    <div class="flex items-center gap-sm">
+                                        <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                                        <span class="font-body-md text-body-md">Optimal</span>
+                                    </div>
+                                </td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">3 days ago
+                                </td>
+                                <td class="px-lg py-md text-right">
+                                    <button
+                                        class="p-xs rounded hover:bg-surface-container-high transition-colors text-on-surface-variant group-hover:text-primary">
+                                        <span class="material-symbols-outlined">more_vert</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-surface-container-low transition-colors group">
+                                <td class="px-lg py-md font-body-md text-body-md font-bold">Steel Rods</td>
+                                <td class="px-lg py-md font-mono-data text-mono-data">12.5</td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">Tons</td>
+                                <td class="px-lg py-md">
+                                    <div class="flex items-center gap-sm">
+                                        <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                        <span class="font-body-md text-body-md text-secondary">Low Stock</span>
+                                    </div>
+                                </td>
+                                <td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">1 week ago
+                                </td>
+                                <td class="px-lg py-md text-right">
+                                    <button
+                                        class="p-xs rounded hover:bg-surface-container-high transition-colors text-on-surface-variant group-hover:text-primary">
+                                        <span class="material-symbols-outlined">more_vert</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Micro-interaction Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Updated Tab highlighting simulation for TopNavBar
+            const topNavLinks = document.querySelectorAll('nav .md\\:flex a');
+            topNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    topNavLinks.forEach(l => {
+                        l.classList.remove('active-indicator-top', 'text-primary', 'font-bold');
+                        l.classList.add('text-on-surface-variant', 'border-transparent');
+                    });
+                    link.classList.add('active-indicator-top', 'text-primary', 'font-bold');
+                    link.classList.remove('text-on-surface-variant', 'border-transparent');
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>
